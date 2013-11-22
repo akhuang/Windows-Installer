@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <ComponentGroup Id="COMPGROUP_UTILS" Directory="TARGETDIR">
+ 
+      <!--Database string-->
+ 
+      <!--<Component Id="COMP_WebDataBaseStringKey" Guid="43A2B2F8-09CA-4222-B343-7D5AA7D8FDA7">
+        <util:XmlFile Id="WebDataBaseStringKey"
+                          Action="setValue"
+                          ElementPath="//connectionStrings/add[\[]@name='Global'[\]]/@connectionString"
+                          Value="[DATABASECONNECTIONSTRING]"
+                          File="[#filC3B915392F0149E11065447656A6B1E4]"
+                          SelectionLanguage="XPath"
+                          Sequence="1" />
+      </Component>
+ 
+      <Component Id="COMP_WcfUrl" Guid="D3E3335F-4599-4E8E-B273-D26F00389985">
+        <util:XmlFile Id="WebWcfAddrKey"
+                 Action="setValue"
+                 ElementPath="//system.serviceModel/client/endpoint/@address"
+                 Value="http://[WCFURL]/DocumentCenter.svc/mex"
+                 File="[#filC82DA396BB6C97F5767E4FEF73001A6F]"
+                 SelectionLanguage="XPath"
+                 Sequence="1" />
+      </Component>
+
+      <Component Id="COMP_UploadFiles" Guid="31791F79-AD66-48A6-BC0B-EEFBE40C1573">
+        <util:XmlFile Id="CRMUploadFilesKey"
+                 Action="setValue"
+                  ElementPath="//appSettings/add[\[]@key='UploadFilesPath'[\]]/@value"
+                 Value="[DIRUPLOADFILES]"
+                 File="[#filC3B915392F0149E11065447656A6B1E4]"
+                 SelectionLanguage="XPath"
+                 Sequence="1" />
+      </Component>
+
+      --><!--Wcf--><!--
+      <Component Id="COMP_WcfDatabaseString" Guid="B6C504A3-ADEC-4B4F-8EC0-95EE93F6B897">
+        <util:XmlFile Id="WcfDataBaseStringKey"
+                            Action="setValue"
+                            ElementPath="//connectionStrings/add[\[]@name='Global'[\]]/@connectionString"
+                            Value="[DATABASECONNECTIONSTRING]"
+                            File="[#fil3084311A505C9AE4BFEEEE99439BAF78]"
+                            SelectionLanguage="XPath"
+                            Sequence="1" />
+      </Component>
+ 
+      <Component Id="COMP_WcfFileFolder" Guid="9FCE2023-4023-4C8C-8670-675EBEB7A1FC">
+        <util:XmlFile Id="WcfFileFolderKey"
+                                            Action="setValue"
+                                            ElementPath="//add[\[]@key='docFolderPath'[\]]/@value"
+                                            Value="[DIRATTACHMENTS]"
+                                            File="[#filA9BAAEAC44941305F3858CC97C1AB899]"
+                                            SelectionLanguage="XPath"
+                                            Sequence="1" />
+      </Component>
+
+      --><!--JOB--><!-- 
+      <Component Id="COMP_JobMonitorWcfUrl" Guid="035A81E8-ED47-471A-B10F-50CE4B727C2F">
+        <util:XmlFile Id="JobWcfAddrKey"
+                            Action="setValue"
+                            ElementPath="//system.serviceModel/client/endpoint/@address"
+                            Value="http://[WCFURL]/DocumentCenter.svc/mex"
+                            File="[#filABB1737522CC31CACFDF1BB79496D02B]"
+                            SelectionLanguage="XPath"
+                            Sequence="1" />
+      </Component> 
+      <Component Id="COMP_JobDataBaseString" Guid="F5F37C2A-763C-41CD-A4A2-A31D2577187E">
+        <util:XmlFile Id="JobDataBaseStringKey"
+                       Action="setValue"
+                       ElementPath="//connectionStrings/add[\[]@name='Global'[\]]/@connectionString"
+                       Value="[DATABASECONNECTIONSTRING]"
+                       File="[#fil4C6DADA6FC8069EFA778B73B3A914DB9]"
+                       SelectionLanguage="XPath"
+                       Sequence="1" />
+      </Component> 
+      
+      <Component Id="COMP_JobFileFolder" Guid="01B7094A-5FEB-4643-83C0-76E497E589E4">
+        <util:XmlFile Id="JobFileFolderKey"
+                                Action="setValue"
+                                ElementPath="//add[\[]@key='docFolderPath'[\]]/@value"
+                                Value="[DIRATTACHMENTS]"
+                                File="[#filCD108C0E480935FD88A2B3CF78D86DEB]"
+                                SelectionLanguage="XPath"
+                                Sequence="1" />
+      </Component>-->
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+
+
+  <Product Name='Foobar 1.0' Id='*' UpgradeCode='F7D6DF99-A709-4FC4-8DD1-0B354DFA634C'
+    Language='1033' Codepage='1252' Version="3.0.0" Manufacturer='Acme Ltd.'>
+
+    <Package Id='*' Keywords='Installer' Description="Acme's Foobar 1.0 Installer"
+      Comments='Foobar is a registered trademark of Acme Ltd.' Manufacturer='Acme Ltd.'
+      InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <MajorUpgrade
+  DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes'  />
+    <!--<Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ProgramMenuFolder">
+          <Directory Id="MyShortcutsDir" Name="SimpleInstaller" />
+        </Directory>
+      </Directory>
+    </Directory>-->
+
+    <Property Id="WEBURL" Value="Http://www.fy24h.com"></Property>
+    <DirectoryRef Id="MyShortcutsDir">
+      <Component Id="CMP_Shortcut"
+                 Guid="{28D7B2A2-DD51-433E-A4AD-7E4A5970B26D}" >
+
+        <Shortcut Id="UninstallShortcut"
+                    Name="uninstall"
+                    Description="uninstall"
+                    Target="[System64Folder]msiexec.exe"
+                    Arguments="/x [ProductCode]" />
+
+        <RemoveFolder Id="MyShortcutsDir" On="uninstall" />
+
+        <util:InternetShortcut Id="WebsiteShortcut"
+                        Name="test"
+                               Target="[WEBURL]"/>
+
+        <RegistryValue Root="HKCU"
+                        Key="Software\Microsoft\test"
+                        Name="installed"
+                        Type="integer"
+                        Value="1"
+                        KeyPath="yes" />
+
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="MainApplication" Title="Main Application" Level="1">
+      <ComponentGroupRef Id="ProductComponents"/>
+      <ComponentRef Id="CMP_Shortcut" />
+    </Feature>
+
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir"/>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="SimpleInstaller" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="MyShortcutsDir" Name="SimpleInstaller" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="FoobarAppl10.exe" Guid="28012218-ED4A-4404-9C4B-41B519AB5CE1">
+        <File Id="FoobarAppl10.exe" Source="FoobarAppl10.exe" KeyPath="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="Helper.dll" Guid="4FDC0578-30D0-445B-B360-8DBA7FA06727">
+        <File Id="Helper.dll" Source="Helper.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="version.txt" Guid="4473BEF3-E855-478E-AB91-46434611F033">
+        <File Id="version.txt" Source="version.txt" KeyPath="yes"/>
+      </Component>
+      <Component Id="test.txt" Guid="2D53BE6C-0378-4FE2-9DC6-2865292B3B36">
+        <File Id="test.txt" Source="test.txt" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="IISComponents" Directory="INSTALLFOLDER" >
+      <Component Id="CompCRM" Guid="E6605AB2-CA03-4A78-AE66-D7B9BEF4501A">
+        <iis:WebSite Id="IISWebsiteExisting" Description="[WEBSITEDESCRIPTION]" ConfigureIfExists="no" Directory="TARGETDIR">
+          <iis:WebAddress Id="IISWebAddressExisting" Port="[WEBSITEPORT]" IP="[WEBSITEIP]" Header="[WEBSITEHOSTHEADER]" />
+          <iis:WebVirtualDir Id="WebVirtualDirectory" Alias="[VIRTUALDIRECTORYNAME]" Directory="DIRCRMNET">
+            <iis:WebDirProperties Id="CRMPROPERTY" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WebApplicationExisting" Name="[VIRTUALDIRECTORYNAME]" WebAppPool="WebAppPoolExisting">
+              <iis:WebApplicationExtension CheckPath="no"
+                                  Script="yes"
+                                  Executable="[FRAMEWORKROOT]v4.0.30319\aspnet_isapi.dll"
+                                  Verbs="GET,HEAD,POST" />
+              <iis:WebApplicationExtension Extension="*"  Script="yes"
+      Executable="[FRAMEWORKROOT]v4.0.30319\aspnet_isapi.dll" Verbs="GET,HEAD,POST"></iis:WebApplicationExtension>
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+          <iis:WebVirtualDir Id="WcfVirtualDirectory" Alias="[VIRTUALDIRECTORYNAME]_WCF" Directory="DIRWCF">
+            <iis:WebDirProperties Id="WCFPROPERTY" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WcfApplicationExisting" Name="[VIRTUALDIRECTORYNAME]_WCF" WebAppPool="WcfAppPoolExisting">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+        </iis:WebSite>
+
+        <iis:WebAppPool Id="WebAppPoolExisting" Name="[VIRTUALDIRECTORYNAME]_POOL"  Identity="networkService"  />
+        <iis:WebAppPool Id="WcfAppPoolExisting" Name="[VIRTUALDIRECTORYNAME]_WCF_POOL" Identity="networkService" />
+        <CreateFolder Directory="MYPROGRAMDIR"></CreateFolder>
+        <!--<CreateFolder Directory="DIRCRMNET"></CreateFolder>
+                <CreateFolder Directory="DIRWCF"></CreateFolder>
+                <CreateFolder Directory="DIRJOB"></CreateFolder>-->
+
+        <Condition>IISMAJORVERSION = "#6"</Condition>
+      </Component>
+
+      <Component Id="EnableASPNet4Extension" Permanent="yes" Guid="36324AF1-69FB-46A5-8451-799F9C03AD64">
+        <CreateFolder/>
+        <!-- Need to have to ensure created -->
+        <iis:WebServiceExtension Id="ASPNet4Extension" Group="ASP.NET v4.0.30319" Allow="yes"
+                                 File="[ASPNETISAPIDLL]" Description="ASP.NET v4.0.30319"
+                                 UIDeletable="no"/>
+      </Component>
+
+      <Component Id="CompCRMWithIIS7" Guid="8B1FCDC4-517F-49FA-B1BB-A38116B266DA">
+        <iis:WebSite Id="IISWebsiteExistingWithIIS7" Description="[WEBSITEDESCRIPTION]" ConfigureIfExists="no" Directory="TARGETDIR">
+          <iis:WebAddress Id="IISWebAddressExistingIIS7" Port="[WEBSITEPORT]" IP="[WEBSITEIP]" Header="[WEBSITEHOSTHEADER]" />
+          <iis:WebVirtualDir Id="WebVirtualDirectoryIIS7" Alias="[VIRTUALDIRECTORYNAME]" Directory="DIRCRMNET">
+            <iis:WebDirProperties Id="CRMPROPERTYIIS7" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WebApplicationExistingIIS7" Name="[VIRTUALDIRECTORYNAME]" WebAppPool="WebAppPoolExistingIIS7">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+          <iis:WebVirtualDir Id="WcfVirtualDirectoryIIS7" Alias="[VIRTUALDIRECTORYNAME]_WCF" Directory="DIRWCF">
+            <iis:WebDirProperties Id="WCFPROPERTYIIS7" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WcfApplicationExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_WCF" WebAppPool="WcfAppPoolExistingIIS7">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+        </iis:WebSite>
+        <iis:WebAppPool Id="WebAppPoolExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_POOL"  Identity="networkService"   ManagedRuntimeVersion="v4.0" ManagedPipelineMode="Integrated" />
+        <iis:WebAppPool Id="WcfAppPoolExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_WCF_POOL" Identity="networkService" ManagedRuntimeVersion="v4.0" ManagedPipelineMode="Integrated" />
+        <CreateFolder Directory="MYPROGRAMDIR"></CreateFolder>
+
+        <!--<CreateFolder Directory="DIRCRMNET"></CreateFolder>
+                <CreateFolder Directory="DIRWCF"></CreateFolder>
+                <CreateFolder Directory="DIRJOB"></CreateFolder>-->
+
+        <Condition>IISMAJORVERSION="#7"</Condition>
+      </Component>
+      <Component Id="MSSQLDatabaseConfig" Guid="EA5259EF-BE53-4F83-A434-AC73BE05B047">
+        <sql:SqlScript Id="CreateSchemaScriptUser" BinaryKey="SqlSchemaScriptsBin" ExecuteOnInstall="yes" Sequence="1"  SqlDb="MSSqlDB"  />
+        <sql:SqlScript Id="InitDataScriptUser" BinaryKey="SqlInitDataScriptsBin" ExecuteOnInstall="yes" Sequence="2"  SqlDb="MSSqlDB" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+</Wix>

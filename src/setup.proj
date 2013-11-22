@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+    <PropertyGroup>
+        <BuildFolder>$(MSBuildProjectDirectory)\build</BuildFolder>
+        <CompileFolder>$(BuildFolder)\compile</CompileFolder>
+        <DeployFolder>$(BuildFolder)\deploy</DeployFolder>
+
+        <Configuration>Debug</Configuration>
+        <OutputPath>$(CompileFolder)</OutputPath>
+        <BuildPlatform Condition="$(BuildPlatform) == ''">x86</BuildPlatform>
+
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="fy24h.CustomActions\fy24h.CustomActions.csproj" />
+        <ProjectReference Include="fy24h.Installer\fy24h.Installer.wixproj" />
+        <ProjectReference Include="fy24h.Bootstrapper\fy24h.Bootstrapper.wixproj" />
+
+        <!--<ProjectReference Include="StandardSetup\StandardSetup.wixproj" />
+        <ProjectReference Include="Bootstrapper1\Bootstrapper1.wixproj" />-->
+
+    </ItemGroup>
+
+    <Target Name="Build">
+        <CallTarget Targets="Clean"></CallTarget>
+        <CallTarget Targets="Compile"></CallTarget>
+        <!--<CallTarget Targets="MsDeploy"></CallTarget>-->
+    </Target>
+
+    <Target Name="Clean">
+        <MSBuild Projects="@(ProjectReference)" BuildInParallel="true" Targets="Clean"></MSBuild>
+        <RemoveDir  Directories="$(BuildFolder)" ContinueOnError="true"></RemoveDir>
+    </Target>
+
+    <Target Name="Compile">
+        <MSBuild Projects="@(ProjectReference)" Targets="Build" Properties="Configuration=$(Configuration);OutputPath=$(OutputPath)">
+        </MSBuild>
+        <ItemGroup>
+            <!--<DllReferences Include="$(CompileFolder)\**\*"></DllReferences>-->
+        </ItemGroup>
+    </Target>
+
+    <Target Name="MsDeploy" DependsOnTargets="Compile">
+        <Copy SourceFiles="@(SoureFiles)" DestinationFolder="$(DeployFolder)\%(RecursiveDir)"></Copy>
+    </Target>
+
+</Project>

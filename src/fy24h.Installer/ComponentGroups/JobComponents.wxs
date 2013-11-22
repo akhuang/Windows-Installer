@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <Fragment>
+    <?include ..\Defines.wxi ?>
+    <DirectoryRef Id="DIRJOB">
+      <Component Id="cmp6E29E0635396E450FEB2875FF745DB04" Guid="D397A058-EB56-426E-BB9C-325FCFB405C7">
+        <File Id="fil5F0B4DB21F72B737F20E2E8820BD1983" KeyPath="yes" Source="$(var.JobFilePath)\fy24h.Jobs.dll" />
+      </Component>
+
+      <Component Id="cmp9E156C3912B6A8F1374B90145E7F6687" Guid="B6921E4A-22CF-4E3A-883E-CBA58E3CE617">
+        <File Id="filFD8D6DFBE2BADE4F5E0007C09C699A0A" KeyPath="yes" Source="$(var.JobFilePath)\SchedulerMonitor.exe" />
+        <ServiceInstall Id="InstallWindowsServiceForCRM8"
+                 Name="custom windows service"
+                 DisplayName="Custom Service for fy24h" Vital="no"
+                 Start="auto"
+                 ErrorControl="normal"
+                 Type="ownProcess">
+          <util:ServiceConfig ServiceName="CustomSeviceForfy24h"
+                              FirstFailureActionType="restart"
+                              SecondFailureActionType="restart"
+                              ThirdFailureActionType="restart"
+                              RestartServiceDelayInSeconds="5"
+                              ResetPeriodInDays="1" />
+        </ServiceInstall>
+        <ServiceControl Id="SC_fy24hService"
+                        Name="CustomSeviceForfy24h"
+                        Start="install"
+                        Stop="both"
+                        Remove="uninstall"
+                        Wait="yes"  />
+      </Component>
+
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="JobComponentGroup">
+      <ComponentRef Id="cmp6E29E0635396E450FEB2875FF745DB04" />
+      <ComponentRef Id="cmp9E156C3912B6A8F1374B90145E7F6687" />
+    </ComponentGroup>
+  </Fragment>
+</Wix>

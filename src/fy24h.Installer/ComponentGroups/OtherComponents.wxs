@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <!--Web start-->
+    <!--<ComponentGroup Id="OtherWebComponentGroup">
+      <ComponentRef Id="cmpPerssionContent" />
+      <ComponentRef Id="cmpuploadfiles" />
+      <ComponentRef Id="compAppData"/>
+      <ComponentRef Id="compLogs" />
+      <ComponentRef Id="compUserFaces"/>
+      <ComponentRef Id="COMPDIRUPLOADFILES" />
+    </ComponentGroup>
+    -->
+    <!--App_Data-->
+    <!--
+    <DirectoryRef Id="DIR_APPDATA">
+      <Component Id="compAppData" Guid="28214281-5BF1-4A6E-8CF7-AA739E23EAE9">
+        <File  Id="FILE_TEMP_DATA"  Source="_appdata.txt">
+        </File>
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DIR_LOGS">
+      <Component Id="compLogs" Guid="8C13BD74-7AE4-4FFF-A9F6-6F14E5541E44">
+        <File  Id="FILE_TEMP_LOGS"  Source="_appdata.txt">
+        </File>
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DIR_UserFaces">
+      <Component Id="compUserFaces" Guid="CB3F40D9-E893-4065-9DB3-AAEE467F19F7">
+        <File  Id="FILE_TEMP_USERFACES"  Source="_appdata.txt">
+        </File>
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+
+    -->
+    <!--Content-->
+    <!--
+    <DirectoryRef Id="dirBF25259EF89205E0FE0A9408127A1FBD">
+      <Component Id="cmpPerssionContent" Guid="524CC0EB-55CF-4326-B141-B3EB316510C1">
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+    -->
+    <!--UploadFiles-->
+    <!--
+    <DirectoryRef Id="dir1B20B5EFA2295E74BC3833EFD00CA9EF">
+      <Component Id="cmpuploadfiles" Guid="0142F478-23D6-45DF-8277-F6A0959BE0AB">
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DIRUPLOADFILES">
+      <Component Id="COMPDIRUPLOADFILES" Guid="6B99917F-75F0-4120-BAAC-7483E5752073">
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+          <util:PermissionEx User="NetworkService" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+    -->
+    <!--Web end-->
+    <!--
+
+    -->
+    <!--WCF Start-->
+    <!--
+    <ComponentGroup Id="OtherWcfComponentGroup">
+      <ComponentRef Id="COMPDIRATTACH" />
+      <ComponentRef Id="COMPDIRWCF"/>
+    </ComponentGroup>
+    <DirectoryRef Id="DIRATTACHMENTS">
+      <Component Id="COMPDIRATTACH" Guid="1A8F0590-B23C-486A-921A-76A1F61AB887">
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DIRWCF">
+      <Component Id="COMPDIRWCF" Guid="046CCB6E-43F2-4BB8-9662-D07CAD2E26EE" >
+        <CreateFolder>
+          <util:PermissionEx User="Everyone" GenericAll="yes" />
+          <util:PermissionEx User="NetworkService" GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+    </DirectoryRef>
+    -->
+    <!--WCF End-->
+
+  </Fragment>
+</Wix>

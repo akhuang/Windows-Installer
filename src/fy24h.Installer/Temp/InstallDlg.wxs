@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI Id="InstallDlg_UI">
+            <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+            <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+
+            <DialogRef Id="SecondDlg"/>
+            <DialogRef Id="ErrorDlg" />
+            <DialogRef Id="FatalError" />
+            <DialogRef Id="FilesInUse" />
+            <DialogRef Id="MsiRMFilesInUse" />
+            <DialogRef Id="PrepareDlg" />
+            <DialogRef Id="ProgressDlg" />
+            <DialogRef Id="ResumeDlg" />
+            <DialogRef Id="UserExit" />
+            <DialogRef Id="WelcomeDlg" />
+            <DialogRef Id="WelcomeEulaDlg" />
+            
+            <Dialog Id="InstallDlg" Width="370"
+                                    Height="270"
+                                    Title="Amazing Software"
+                                    NoMinimize="no">
+                <Control Id="Next" Text="Install"
+                        Type="PushButton"
+                        X="245"
+                        Y="243"
+                        Width="100"
+                        Height="17">
+                    <Publish Event="EndDialog"
+                            Value="Return" />
+                </Control>
+                <Control Id="Back" Text="Cancel"
+                        Type="PushButton"
+                        X="180"
+                        Y="243"
+                        Width="100"
+                        Height="17"
+                        Cancel="yes">
+                    <Publish Event="EndDialog"
+                    Value="Exit" />
+                </Control>
+            </Dialog>
+        </UI>
+    </Fragment>
+</Wix>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="CRMDlg">
+      <Dialog Width="370" Height="270" Id="UseExistingWebsiteDlg" Title="aa" NoMinimize="yes">
+        <Control Id="WebsiteLabel" Type="Text" X="26" Y="60" Width="100" Height="15" TabSkip="no" Text="select websites:" />
+        <Control Type="ComboBox" Width="269" Height="16" X="26" Y="75" Sorted="yes" Id="ExistingWebsite" Property="ExistingWebsite" ComboList="yes">
+        </Control>
+         
+        <!--Button-->
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+          <Publish Event="NewDialog" Value="WelcomeDlg"></Publish>
+        </Control>
+
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+        </Control>
+      </Dialog>
+    </UI>
+
+
+  </Fragment>
+</Wix>

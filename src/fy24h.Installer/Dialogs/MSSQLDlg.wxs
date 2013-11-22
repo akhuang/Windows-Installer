@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI Id="WixUI_MsSqlDlg">
+            <Dialog Width="370" Height="270" Id="MSSQLConnectionDlg" Title="!(loc.DlgTitle)" NoMinimize="yes">
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.DlgBannerBitmap)" />
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+
+                <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>{\WixUI_Font_Title}数据库安装</Text>
+                </Control>
+                <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>选择数据库等</Text>
+                </Control>
+
+                <Control Id="DatabaseHostLabel" Type="Text" X="45" Y="56" Width="100" Height="15" TabSkip="no" Text="服务器名称:" />
+                <Control Id="DatabaseHostEdit" Type="Edit" X="45" Y="71" Width="224" Height="15" Property="DBHOST" Text="{80}">
+                    <Text>./SQLEXPRESS</Text>
+                </Control>
+
+                <!--<Control Type="Text" Width="178" Height="11" X="45" Y="98" Id="PrivAccountLabel" TabSkip="yes">
+                    <Text>选择身份验证模式:</Text>
+                </Control>
+
+                <Control Id="Buttons" Type="RadioButtonGroup" X="41" Y="112" Width="230" Height="33" Property="DBSECURITYMETHOD" />-->
+                <Control Id="DatabaseNameLabel" Type="Text" X="45" Y="98" Width="50" Height="10" TabSkip="no">
+                    <Text>数据库名称:</Text>
+                </Control>
+                <Control Id="DatabaseNameEdit" Type="Edit" X="45" Y="112" Width="220" Height="15" Property="SQLDATABASE">
+                </Control>
+
+                <Control Id="UsernameLabel" Type="Text" X="45" Y="139" Width="50" Height="10" TabSkip="no">
+                    <Text>用户名:</Text>
+                </Control>
+                <Control Id="UsernameEdit" Type="Edit" X="45" Y="153" Width="220" Height="15" Property="SQLADMINUSERNAME" Text="Administrator">
+                </Control>
+
+                <Control Id="PasswordLabel" Type="Text" X="45" Y="180" Width="100" Height="15" TabSkip="no" Text="密码:" />
+                <Control Id="PasswordEdit" Type="Edit" X="45" Y="194" Width="220" Height="15" Property="SQLADMINPASSWORD" Text="{80}" Password="yes">
+                </Control>
+
+                <Control Id="Test" Type="PushButton" X="109" Y="243" Width="56" Height="17" Text="!(loc.WixUITest)" />
+
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+                </Control>
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+                    <Publish Event="DoAction" Value="CheckMSSqlDlgInput" Order="1">1</Publish>
+
+                    <!--<Condition Action="disable"><![CDATA[SQLSERVERCONNECTIONCHECK <> "1"]]></Condition>
+                    <Condition Action="enable">SQLSERVERCONNECTIONCHECK = "1"</Condition>-->
+                    <!--<Publish Event="DoAction" Value="checkDatabaseLogin" Order="1">1</Publish>
+                    <Publish Event="DoAction" Order="3" Value="proposeDatabaseName">checkDatabaseConnection = "1"</Publish>
+                    <Publish Event="DoAction" Order="4" Value="proposeUsername">checkDatabaseConnection = "1"</Publish>
+                    <Publish Event="DoAction" Order="5" Value="proposePassword">checkDatabaseConnection = "1"</Publish>-->
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+                    <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+                </Control>
+
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+            </Dialog>
+        </UI>
+    </Fragment>
+</Wix>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" >
+  <Bundle Name="Bootstrapper1" Version="3.0.0.0" Manufacturer="MS"  DisableRepair="yes"  UpgradeCode="b2ff5f71-4048-452a-a38e-f6f27491de13">
+
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+      <bal:WixStandardBootstrapperApplication LicenseUrl="kk.com"   SuppressRepair="yes" />
+      <Payload Name="2052\thm.wxl" SourceFile="2052\thm.wxl" />
+    </BootstrapperApplicationRef>
+
+    <Chain>
+      <!-- TODO: Define the list of chained packages. -->
+      <MsiPackage SourceFile="..\StandardSetup\bin\release\standardsetup.msi" DisplayInternalUI="yes" />
+    </Chain>
+  </Bundle>
+</Wix>

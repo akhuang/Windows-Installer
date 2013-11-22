@@ -1,0 +1,45 @@
+﻿<Controls:MetroWindow x:Class="fy24hSetupBootstrapper.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+            Title="" Height="570" Width="449" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Topmost="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Button Height="23" HorizontalAlignment="Right" Command="{Binding Path=InstallCommand }" Name="installButton" VerticalAlignment="Bottom" Width="75"  Margin="0,0,119,20">安装</Button>
+
+        <Button Height="23" Margin="0,0,36,20" Name="cancelButton" VerticalAlignment="Bottom" Width="75" HorizontalAlignment="Right"  Command="{Binding Path=ExitCommand}">取消</Button>
+        <Label Height="28" HorizontalAlignment="Left" Margin="75,132,0,0" Name="label1" VerticalAlignment="Top" Width="154" Content=".Net Framework 4.0"  />
+        <Label Content="IIS 6" Height="28" HorizontalAlignment="Left" Margin="75,166,0,0" Name="label4" VerticalAlignment="Top" />
+        <Label Content="IIS 7" Height="28" HorizontalAlignment="Left" Margin="75,200,0,0" Name="label5" VerticalAlignment="Top" />
+        <Label Content="Microsoft SQL Server 2008" Height="28" HorizontalAlignment="Left" Margin="75,268,0,0" Name="label10" VerticalAlignment="Top" />
+        <Label Content="Microsoft SQL Server 2012" Height="28" HorizontalAlignment="Left" Margin="75,302,0,0" Name="label11" VerticalAlignment="Top" />
+        <Label Content="Microsoft SQL Server Express" Height="28" HorizontalAlignment="Left" Margin="75,234,0,0" Name="label16" VerticalAlignment="Top" />
+        <Label Content="CRM" Height="38" HorizontalAlignment="Left" Margin="40,12,0,0" Name="label19" VerticalAlignment="Top" Width="326" FontSize="20" FontWeight="Bold" />
+        <Label Content="安装前提条件：" Height="28" HorizontalAlignment="Left" Margin="40,78,0,0" Name="label20" VerticalAlignment="Top" />
+        <Border BorderBrush="Silver" BorderThickness="1" Height="1" HorizontalAlignment="Left" Margin="40,105,0,0" Name="border1" VerticalAlignment="Top" Width="335" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="342,135,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="16" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Visibility="{Binding Path=Net40Present, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="342,135,0,0" Name="imgRedX" Stretch="Fill" VerticalAlignment="Top" Width="16" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico" Visibility="{Binding Path=Net40Absent, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,169,0,0" Name="image2" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=IIS6Present, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,169,0,0" Name="image3" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=IIS6Absent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,204,0,0" Name="image4" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=IIS7Present, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,204,0,0" Name="image5" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=IIS7Absent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,239,0,0" Name="image6" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=SqlExpressPresent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,239,0,0" Name="image7" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico"  Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=SqlExpressAbsent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,273,0,0" Name="image8" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=Sql2008Present, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,273,0,0" Name="image9" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=Sql2008Absent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,306,0,0" Name="image10" Source="/CRMCustomBootstrapper;component/Resources/GreenCheck-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=Sql2012Present, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+        <Image Height="16" HorizontalAlignment="Left" Margin="343,306,0,0" Name="image11" Source="/CRMCustomBootstrapper;component/Resources/RedX-24.ico" Stretch="Fill" VerticalAlignment="Top" Visibility="{Binding Path=Sql2012Absent, Converter={StaticResource BooleanToVisibilityConverter}}" Width="16" />
+    </Grid>
+
+</Controls:MetroWindow>

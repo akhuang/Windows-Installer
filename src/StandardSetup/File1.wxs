@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+
+  <Product Id="77da05c4-1644-4bc3-ac14-c0f721fe31fe" Name="Simple Web App" Language="1033" Version="1.0.0.0" Manufacturer="Jon Torresdal" UpgradeCode="a897ccc5-1c81-47e0-a837-65c07a72a7bc">
+
+    <Package InstallerVersion="400" Compressed="yes" />
+
+
+    <Media Id="1" Cabinet="WixProject1.cab" EmbedCab="yes" />
+
+
+    <Property Id="TARGETVDIR" Value="SimpleWebApp"/>
+
+
+    <Property Id="WEBSITE_DESCRIPTION">
+
+      <RegistrySearch Id="WebSiteDescription"
+
+              Name="WebSiteDescription"
+
+              Root="HKLM"
+
+              Key="SOFTWARE\torresdal.net\SimpleWebApp\Install"
+
+              Type="raw" />
+
+    </Property>
+
+    <Property Id="WEBSITE_PORT">
+
+      <RegistrySearch Id="WebSitePort"
+
+              Name="WebSitePort"
+
+              Root="HKLM"
+
+              Key="SOFTWARE\torresdal.net\SimpleWebApp\Install"
+
+              Type="raw" />
+
+    </Property>
+
+    <Property Id="WEBSITE_IP">
+
+      <RegistrySearch Id="WebSiteIP"
+
+              Name="WebSiteIP"
+
+              Root="HKLM"
+
+              Key="SOFTWARE\torresdal.net\SimpleWebApp\Install"
+
+              Type="raw" />
+
+    </Property>
+
+    <Property Id="WEBSITE_HEADER">
+
+      <RegistrySearch Id="WebSiteHeader"
+
+              Name="WebSiteHeader"
+
+              Root="HKLM"
+
+              Key="SOFTWARE\torresdal.net\SimpleWebApp\Install"
+
+              Type="raw" />
+
+    </Property>
+
+
+    <CustomAction Id="GetIISWebSites" BinaryKey="IISCA" DllEntry="GetWebSites" Execute="immediate"  Return="check" />
+
+    <Binary Id="IISCA" SourceFile="$(var.SolutionDir)IISCustomAction\bin\Debug\IISCustomAction.CA.dll" />
+
+
+    <InstallUISequence>
+
+      <Custom Action="GetIISWebSites" After="CostFinalize" Overridable="yes">NOT Installed</Custom>
+
+    </InstallUISequence>
+
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <Directory Id="ProgramFilesFolder">
+
+        <Directory Id="INSTALLLOCATION" Name="SimpleWebApp">
+
+          <Component Id="Default.aspx" Guid="fc46b1a2-35e9-4a17-896b-80b2daaae567">
+
+            <File Id="Default.aspx" Name="Default.aspx" Source="$(var.SolutionDir)SimpleWebApp\Default.aspx" DiskId="1" KeyPath="yes" />
+
+          </Component>
+
+          <Component Id="Web.config" Guid="2ED81B77-F153-4003-9006-4770D789D4B6">
+
+            <File Id="Web.config" Name="Web.config" Source="$(var.SolutionDir)SimpleWebApp\Web.config" DiskId="1" KeyPath="yes" />
+
+            <util:XmlFile Id="AppSettingsAddNode" File="[INSTALLLOCATION]Web.config" Action="createElement" ElementPath="/configuration/appSettings" Name="add" Sequence="1" />
+
+            <util:XmlFile Id="AppSettingsKeyAttribute" Action="setValue" File="[INSTALLLOCATION]Web.config" ElementPath="/configuration/appSettings/add" Name="key" Value="AddedDuringInstall" Sequence="2" />
+
+            <util:XmlFile Id="AppSettingsValueAttribute" Action="setValue" File="[INSTALLLOCATION]Web.config" ElementPath="/configuration/appSettings/add" Name="value" Value="This text was added during installation." Sequence="3" />
+
+          </Component>
+
+          <Directory Id="binFolder" Name="bin">
+
+            <Component Id="SimpleWebApp.dll" Guid="7FC6DA37-12E5-463d-8E7E-08F73E40CCF2">
+
+              <File Id="SimpleWebApp.dll" Name="SimpleWebApp.dll" Source="$(var.SolutionDir)SimpleWebApp\Bin\SimpleWebApp.dll" DiskId="1" KeyPath="yes" />
+
+            </Component>
+
+          </Directory>
+
+        </Directory>
+
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+
+        <Directory Id="MyWebAppStartMenuFolder" Name="SimpleWebApp">
+
+          <Component Id="StartMenuFolder" Guid="B3AEC4C4-3F8E-4865-B87A-B750533776B5" >
+
+            <util:InternetShortcut Id="SimpleWebAppShortcut" Name="SimpleWebApp" Target="http://localhost/SimpleWebApp/Default.aspx" Directory="MyWebAppStartMenuFolder" />
+
+            <RemoveFolder Id="RemoveStartMenuFolder1" On="uninstall"/>
+
+            <RegistryKey Root="HKCU" Key="SOFTWARE\torresdal.net\SimpleWebApp\SimpleWebAppShortcut">
+
+              <RegistryValue Type="string" Value="Default Value"/>
+
+            </RegistryKey>
+
+          </Component>
+
+        </Directory>
+
+      </Directory>
+
+      <Component Id="IISApplication" Guid="FFA12D9C-5AEC-45f8-AA7D-5C4CEC7FA466">
+
+        <iis:WebAppPool Id="SWAAppPool" Name="SWAAppPool" />
+
+        <iis:WebVirtualDir Id="VirtualDir" Alias="[TARGETVDIR]" Directory="INSTALLLOCATION" WebSite="SelectedWebSite">
+
+          <iis:WebApplication Id="SimpleWebAppApp" Name="[TARGETVDIR]" WebAppPool="SWAAppPool" />
+
+          <iis:WebDirProperties Id="WebVirtualDirProperties" Execute="yes" Script="yes" Read="yes" WindowsAuthentication="no" AnonymousAccess="yes" IIsControlledPassword="yes" />
+
+        </iis:WebVirtualDir>
+
+      </Component>
+
+
+      <Component Id="PersistWebSiteValues" Guid="C3DAE2E2-FB49-48ba-ACB0-B2B5B726AE65">
+
+        <RegistryKey Root="HKLM" Key="SOFTWARE\torresdal.net\SimpleWebApp\Install">
+
+          <RegistryValue Name="WebSiteDescription" Type="string" Value="[WEBSITE_DESCRIPTION]"/>
+
+          <RegistryValue Name="WebSitePort" Type="string" Value="[WEBSITE_PORT]"/>
+
+          <RegistryValue Name="WebSiteIP" Type="string" Value="[WEBSITE_IP]"/>
+
+          <RegistryValue Name="WebSiteHeader" Type="string" Value="[WEBSITE_HEADER]"/>
+
+        </RegistryKey>
+
+      </Component>
+
+    </Directory>
+
+
+    <CustomTable Id="AvailableWebSites" >
+
+      <Column Id="WebSiteNo" Category="Identifier" PrimaryKey="yes" Type="int" Width="4" />
+
+      <Column Id="WebSiteDescription" Category="Text" Type="string" PrimaryKey="no"/>
+
+      <Column Id="WebSitePort" Category="Text" Type="string" PrimaryKey="no"/>
+
+      <Column Id="WebSiteIP" Category="Text" Type="string" PrimaryKey="no" Nullable="yes"/>
+
+      <Column Id="WebSiteHeader" Category="Text" Type="string" PrimaryKey="no" Nullable="yes"/>
+
+
+      <Row>
+
+        <Data Column="WebSiteNo">0</Data>
+
+        <Data Column="WebSiteDescription">Bogus</Data>
+
+        <Data Column="WebSitePort">0</Data>
+
+        <Data Column="WebSiteIP"></Data>
+
+        <Data Column="WebSiteHeader"></Data>
+
+      </Row>
+
+    </CustomTable>
+
+
+    <iis:WebSite Id="SelectedWebSite" Description="[WEBSITE_DESCRIPTION]">
+
+      <iis:WebAddress Id="AllUnassigned" Port="[WEBSITE_PORT]" IP="[WEBSITE_IP]" Header="[WEBSITE_HEADER]" />
+
+    </iis:WebSite>
+
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+
+    <UIRef Id="MyUI" />
+
+
+    <Feature Id="ProductFeature" Title="SimpleWebApp" Level="1">
+
+      <ComponentRef Id="Default.aspx" />
+
+      <ComponentRef Id="Web.config" />
+
+      <ComponentRef Id="SimpleWebApp.dll" />
+
+      <ComponentRef Id="StartMenuFolder" />
+
+      <ComponentRef Id="IISApplication" />
+
+      <ComponentRef Id="PersistWebSiteValues" />
+
+    </Feature>
+
+  </Product>
+
+</Wix>

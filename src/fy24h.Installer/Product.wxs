@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+
+  <Product Id="*"
+           Name="fy24h"
+           Language="2052"
+           Version="1.0.2"
+           Manufacturer="www.fy24h.com"
+           UpgradeCode="512d7a23-2977-43ce-b3c8-27e68d036604">
+
+    <Package InstallerVersion="301"
+             Description="fy24h"
+             Compressed="yes"
+             InstallScope="perMachine"
+             Platform="x86"/>
+
+    <MajorUpgrade  Schedule="afterInstallValidate" DowngradeErrorMessage="Newer Version Already Installed" />
+
+    <Media Id="1" Cabinet="media1.cab"  EmbedCab="yes" />
+
+    <PropertyRef Id="FRAMEWORKROOT"/>
+    <PropertyRef Id="NETFRAMEWORK40FULL" />
+    <Condition Message="!(loc.RequireNet40)">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <!-- UI Ref-->
+    <UIRef Id="CustomWixUI" />
+
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.bannerBmp)"/>
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.dialogBmp)"/>
+
+    <!--Directory structure-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ProgramMenuFolder">
+          <Directory Id="MyShortcutsDir" Name="shortcut" />
+        </Directory>
+
+        <Directory Id="MYPROGRAMDIR" Name="fy24h">
+          <Directory Id="DIRCRMNET" Name="CRMAPP">
+            <Directory Id="DIR_APPDATA" Name="App_Data" />
+            <Directory Id="DIR_LOGS" Name="Logs" />
+            <Directory Id="DIR_UserFaces" Name="UserFaces"/>
+          </Directory>
+          <Directory Id="DIRWCF" Name="CRMWebService">
+          </Directory>
+          <Directory Id="DIRJOB" Name="CRMJobService"></Directory>
+          <Directory Id="DIRATTACHMENTS" Name="CRMAttachemnts">
+          </Directory>
+          <Directory Id="DIRUPLOADFILES" Name="CRMUploadFiles"></Directory>
+          <Directory Id="DIRSUPPORT" Name="Support">
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!--Lauch website-->
+    <!--<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="完成后启动应用程序" />
+    <Property Id="WixShellExecTarget" Value="[DIRSUPPORT]crm"  />
+    <CustomAction   Id="LaunchApplication"
+                    BinaryKey="WixCA"
+                    DllEntry="WixShellExec"
+                    Impersonate="yes" />-->
+
+    <sql:SqlDatabase Id="MSSqlDB" Database="[SQLDATABASE]" Server="[DBHOST]" User="SQLLOGINUSER" >
+    </sql:SqlDatabase>
+    <sql:SqlDatabase Id="MSSqlDBIntegrated" Database="[SQLDATABASE]" Server="[DBHOST]">
+    </sql:SqlDatabase>
+    <util:User Name="[SQLADMINUSERNAME]"  Id="SQLLOGINUSER" Password="[SQLADMINPASSWORD]"></util:User>
+
+    <!--目录下的文件-->
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="CompCRM" Guid="E6605AB2-CA03-4A78-AE66-D7B9BEF4501A">
+        <iis:WebSite Id="IISWebsiteExisting" Description="[WEBSITEDESCRIPTION]" ConfigureIfExists="no" Directory="TARGETDIR">
+          <iis:WebAddress Id="IISWebAddressExisting" Port="[WEBSITEPORT]" IP="[WEBSITEIP]" Header="[WEBSITEHOSTHEADER]" />
+          <iis:WebVirtualDir Id="WebVirtualDirectory" Alias="[VIRTUALDIRECTORYNAME]" Directory="DIRCRMNET">
+            <iis:WebDirProperties Id="CRMPROPERTY" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WebApplicationExisting" Name="[VIRTUALDIRECTORYNAME]" WebAppPool="WebAppPoolExisting">
+              <iis:WebApplicationExtension CheckPath="no"
+                                  Script="yes"
+                                  Executable="[FRAMEWORKROOT]v4.0.30319\aspnet_isapi.dll"
+                                  Verbs="GET,HEAD,POST" />
+              <iis:WebApplicationExtension Extension="*"  Script="yes"
+      Executable="[FRAMEWORKROOT]v4.0.30319\aspnet_isapi.dll" Verbs="GET,HEAD,POST"></iis:WebApplicationExtension>
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+          <iis:WebVirtualDir Id="WcfVirtualDirectory" Alias="[VIRTUALDIRECTORYNAME]_WCF" Directory="DIRWCF">
+            <iis:WebDirProperties Id="WCFPROPERTY" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WcfApplicationExisting" Name="[VIRTUALDIRECTORYNAME]_WCF" WebAppPool="WcfAppPoolExisting">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+        </iis:WebSite>
+
+        <iis:WebAppPool Id="WebAppPoolExisting" Name="[VIRTUALDIRECTORYNAME]_POOL"  Identity="networkService"  />
+        <iis:WebAppPool Id="WcfAppPoolExisting" Name="[VIRTUALDIRECTORYNAME]_WCF_POOL" Identity="networkService" />
+        <CreateFolder Directory="MYPROGRAMDIR"></CreateFolder>
+        <!--<CreateFolder Directory="DIRCRMNET"></CreateFolder>
+                <CreateFolder Directory="DIRWCF"></CreateFolder>
+                <CreateFolder Directory="DIRJOB"></CreateFolder>-->
+
+        <Condition>IISMAJORVERSION = "#6"</Condition>
+      </Component>
+
+      <Component Id="EnableASPNet4Extension" Permanent="yes" Guid="36324AF1-69FB-46A5-8451-799F9C03AD64">
+        <CreateFolder/>
+        <!-- Need to have to ensure created -->
+        <iis:WebServiceExtension Id="ASPNet4Extension" Group="ASP.NET v4.0.30319" Allow="yes"
+                                 File="[ASPNETISAPIDLL]" Description="ASP.NET v4.0.30319"
+                                 UIDeletable="no"/>
+      </Component>
+
+
+      <Component Id="CompCRMWithIIS7" Guid="8B1FCDC4-517F-49FA-B1BB-A38116B266DA">
+        <iis:WebSite Id="IISWebsiteExistingWithIIS7" Description="[WEBSITEDESCRIPTION]" ConfigureIfExists="no" Directory="TARGETDIR">
+          <iis:WebAddress Id="IISWebAddressExistingIIS7" Port="[WEBSITEPORT]" IP="[WEBSITEIP]" Header="[WEBSITEHOSTHEADER]" />
+          <iis:WebVirtualDir Id="WebVirtualDirectoryIIS7" Alias="[VIRTUALDIRECTORYNAME]" Directory="DIRCRMNET">
+            <iis:WebDirProperties Id="CRMPROPERTYIIS7" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WebApplicationExistingIIS7" Name="[VIRTUALDIRECTORYNAME]" WebAppPool="WebAppPoolExistingIIS7">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+          <iis:WebVirtualDir Id="WcfVirtualDirectoryIIS7" Alias="[VIRTUALDIRECTORYNAME]_WCF" Directory="DIRWCF">
+            <iis:WebDirProperties Id="WCFPROPERTYIIS7" Execute="yes" Read="yes" DefaultDocuments="default.aspx,index.aspx,index.htm,index.html,default.htm,default.html" />
+            <iis:WebApplication Id="WcfApplicationExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_WCF" WebAppPool="WcfAppPoolExistingIIS7">
+            </iis:WebApplication>
+          </iis:WebVirtualDir>
+        </iis:WebSite>
+        <iis:WebAppPool Id="WebAppPoolExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_POOL"  Identity="networkService"   ManagedRuntimeVersion="v4.0" ManagedPipelineMode="Integrated" />
+        <iis:WebAppPool Id="WcfAppPoolExistingIIS7" Name="[VIRTUALDIRECTORYNAME]_WCF_POOL" Identity="networkService" ManagedRuntimeVersion="v4.0" ManagedPipelineMode="Integrated" />
+        <CreateFolder Directory="MYPROGRAMDIR"></CreateFolder>
+
+        <!--<CreateFolder Directory="DIRCRMNET"></CreateFolder>
+                <CreateFolder Directory="DIRWCF"></CreateFolder>
+                <CreateFolder Directory="DIRJOB"></CreateFolder>-->
+
+        <Condition>IISMAJORVERSION="#7"</Condition>
+      </Component>
+      <Component Id="MSSQLDatabaseConfig" Guid="EA5259EF-BE53-4F83-A434-AC73BE05B047">
+        <sql:SqlScript Id="CreateSchemaScriptUser" BinaryKey="SqlSchemaScriptsBin" ExecuteOnInstall="yes" Sequence="1"  SqlDb="MSSqlDB" />
+        <sql:SqlScript Id="InitDataScriptUser" BinaryKey="SqlInitDataScriptsBin" ExecuteOnInstall="yes" Sequence="2"  SqlDb="MSSqlDB" />
+        <Condition>CUSTOM_DATABASE_SCRIPT_MODE = "New"</Condition>
+      </Component>
+
+      <Component Id="MsSqlUpdateScripts" Guid="DEAA6CF6-4978-4BA0-997C-9EFCE6B04518">
+        <sql:SqlScript Id="UpdateScriptV8020" BinaryKey="SqlUpdateDataScriptsBin" ExecuteOnInstall="yes" Sequence="1"  SqlDb="MSSqlDB" />
+        <!--<sql:SqlScript Id="InitDataScriptUser" BinaryKey="SqlInitDataScriptsBin" ExecuteOnInstall="yes" Sequence="2"  SqlDb="MSSqlDB" />-->
+        <Condition>CUSTOM_DATABASE_SCRIPT_MODE = "Update"</Condition>
+
+
+      </Component>
+
+    </DirectoryRef>
+
+    <ComponentGroup Id="COMPGROUP_ALL">
+      <ComponentGroupRef Id="CompGroupSupport" />
+      <ComponentRef Id="CompCRM" />
+      <ComponentRef Id="CompCRMWithIIS7"/>
+      <ComponentRef Id="EnableASPNet4Extension"/>
+      <ComponentGroupRef Id="WebComponentGroup" />
+      <ComponentGroupRef Id="WcfComponentGroup" />
+      <ComponentGroupRef Id="JobComponentGroup"/>
+      <ComponentRef Id="MSSQLDatabaseConfig"/>
+      <ComponentRef Id="MsSqlUpdateScripts"/>
+      <!--<ComponentGroupRef Id="OtherWebComponentGroup"/>-->
+      <!--<ComponentGroupRef Id="OtherWcfComponentGroup"/>-->
+      <ComponentGroupRef Id="COMPGROUP_REG"/>
+      <ComponentGroupRef Id="COMPGROUP_UTILS"/>
+    </ComponentGroup>
+
+    <!--Features-->
+    <Feature Id="ProductFeature"
+            Title="Main Product"
+            Level="1">
+      <ComponentGroupRef Id="COMPGROUP_ALL" />
+    </Feature>
+
+    <!--<CustomAction Id="SetProperty_InstallLocation" Property="APPINSTALLLOCATION" Value="[MYPROGRAMDIR]"/>
+    <InstallExecuteSequence>
+      <Custom Action="SetProperty_InstallLocation" After="InstallValidate">NOT Installed</Custom>
+    </InstallExecuteSequence>-->
+
+    <CustomTable Id="AvailableWebSites" >
+      <Column Id="WebSiteId" Category="Identifier" PrimaryKey="yes" Type="int" Width="4" />
+      <Column Id="WebSiteDescription" Category="Text" Type="string" PrimaryKey="no" Nullable="yes"/>
+      <Column Id="WebSiteIP" Category="Text" Type="string" PrimaryKey="no" Nullable="yes"/>
+      <Column Id="WebSitePort" Category="Text" Type="string" PrimaryKey="no"/>
+      <Column Id="WebSiteHeader" Category="Text" Type="string" PrimaryKey="no" Nullable="yes"/>
+      <Row>
+        <Data Column="WebSiteId">0</Data>
+        <Data Column="WebSiteDescription"></Data>
+        <Data Column="WebSiteIP"></Data>
+        <Data Column="WebSitePort">0</Data>
+        <Data Column="WebSiteHeader"></Data>
+      </Row>
+    </CustomTable>
+    <!--<EnsureTable Id='AvailableWebSites'/>-->
+    <EnsureTable Id='ComboBox'/>
+  </Product>
+</Wix>

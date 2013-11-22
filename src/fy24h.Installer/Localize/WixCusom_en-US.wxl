@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-US" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+    <String Id="DlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
+    <String Id="DlgTitle" Overridable="yes">[ProductName] 安装程序</String>
+    <String Id="RequireNet40" Overridable="yes">没有安装.Net Framework 4.0. 请安装后再运行本安装程序. </String>
+</WixLocalization>

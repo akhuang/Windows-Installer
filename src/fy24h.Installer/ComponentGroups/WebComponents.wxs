@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <?include ..\Defines.wxi ?>
+    <DirectoryRef Id="DIRCRMNET">
+      <Component Id="cmpE3DD5FB8191B74084D4DEFAF102E5A21" Guid="A7906109-459F-4D30-8332-EEF024033952">
+        <File Id="fil3D03EB3C0ADE76ED38F8E1816B2A474B" KeyPath="yes" Source="$(var.WebFilePath)\favicon.ico" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="WebComponentGroup">
+      <ComponentRef Id="cmpE3DD5FB8191B74084D4DEFAF102E5A21" />
+    </ComponentGroup>
+  </Fragment>
+</Wix>

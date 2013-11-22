@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <Fragment>
+    <?include ..\Defines.wxi ?>
+    <DirectoryRef Id="DIRWCF">
+      <Component Id="cmpA734DA479BCD9FFF5C36BC95CFE78ED7" Guid="2E6D5ABA-FCA8-426B-93F9-5FC70D1BF72B">
+        <File Id="fil32E0E7883D5CEB73120EF435BAC3E06A" KeyPath="yes" Source="$(var.WcfFilePath)\fy24h.svc" />
+      </Component>
+    
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="WcfComponentGroup">
+      <ComponentRef Id="cmpA734DA479BCD9FFF5C36BC95CFE78ED7" />
+    </ComponentGroup>
+  </Fragment>
+</Wix>

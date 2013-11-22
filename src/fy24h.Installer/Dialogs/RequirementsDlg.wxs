@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="WixUI_RequirementsDlg">
+      <Dialog Width="370" Height="270" Id="RequirementsDlg" Title="!(loc.DlgTitle)" NoMinimize="yes">
+
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.DlgBannerBitmap)"  />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+
+        <Control Id="Title" Type="Text" X="11" Y="8" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>{\WixUI_Font_Title}前提条件</Text>
+        </Control>
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>应用程序所需条件</Text>
+        </Control>
+
+        <Control Type="Text" Width="206" Height="17" X="26" Y="55" Id="NetFrameLabel" Text="Microsoft .Net Framework 4.0" />
+        <Control Type="Icon" Width="16" Height="16" X="308" Y="50" Id="NetIcon" Text="[NETCHECK]" IconSize="16" />
+
+        <Control Type="Text" Width="247" Height="9" X="26" Y="76" Id="IISLabel">
+          <Text>Microsoft Internet Information Services (IIS), Version [IISMAJORVERSION]</Text>
+        </Control>
+        <Control Type="Icon" Width="16" Height="16" X="308" Y="73" Id="IISIcon" Text="[IISCHECK]" IconSize="16">
+        </Control>
+
+        <Control Type="Text" Width="248" Height="11" X="26" Y="98" Id="SQLLabel">
+          <Text>Microsoft SQL Server SqlExpress/2008</Text>
+        </Control>
+        <Control Type="Icon" Width="16" Height="16" X="308" Y="94" Id="SqlServerIcon" Text="[SQLSERVERCHECK]" IconSize="16" />
+
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" >
+          <Condition Action="disable"> NETCHECK = "RedX" OR IISCHECK = "RedX" </Condition>
+          <!--<Publish Property="TARGETMODE" Value="ExistingWebsite" Order="2">1</Publish>-->
+          <!--<Publish Event="DoAction" Value="getWebsitesCustomAction" Order="1">1</Publish>-->
+          <Publish Event="DoAction" Value="GetExistWebsites" Order="1">1</Publish>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+        </Control>
+      </Dialog>
+
+    </UI>
+  </Fragment>
+</Wix>

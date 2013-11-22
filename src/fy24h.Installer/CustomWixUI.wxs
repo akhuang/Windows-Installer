@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  <copyright file="WixUI_Mondo.wxs" company="Outercurve Foundation">
+    Copyright (c) 2004, Outercurve Foundation.
+    This software is released under Microsoft Reciprocal License (MS-RL).
+    The license and further copyright text can be found in the file
+    LICENSE.TXT at the root directory of the distribution.
+  </copyright>
+-->
+
+<!--
+First-time install dialog sequence:
+- WixUI_WelcomeDlg
+- WixUI_LicenseAgreementDlg
+- WixUI_SetupTypeDlg
+- WixUI_VerifyReadyDlg
+- WixUI_CustomizeDlg
+- WixUI_DiskCostDlg
+- WixUI_BrowseDlg
+
+Maintenance dialog sequence:
+- WixUI_MaintenanceWelcomeDlg
+- WixUI_MaintenanceTypeDlg
+- WixUI_CustomizeDlg
+- WixUI_VerifyReadyDlg
+
+Patch dialog sequence:
+ - WixUI_WelcomeDlg
+ - WixUI_VerifyReadyDlg
+-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="CustomWixUI">
+      <!--<TextStyle Id="WixUI_Font_Normal" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Normal_Size)" />
+            <TextStyle Id="WixUI_Font_Bigger" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Bigger_Size)" />
+            <TextStyle Id="WixUI_Font_Title" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Title_Size)" Bold="yes" />
+            <TextStyle Id="WixUI_Font_Emphasized" FaceName="!(loc.Advanced_Font_FaceName)" Size="!(loc.Advanced_Font_Emphasized_Size)" Bold="yes" />-->
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="Mondo" />
+
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+      <DialogRef Id="BrowseDlg"/>
+      <!--Custome Dialog-->
+      <DialogRef Id="UseExistingWebsiteDlg"></DialogRef>
+      <DialogRef Id="ChooseDatabaseScriptModeDlg"/>
+      <DialogRef Id="MSSQLConnectionDlg"/>
+
+      <!--<DialogRef Id="MyCustomDlg" />-->
+
+      <!--设置InstallDir1的默认值-->
+      <!--<Property Id="INSTALLDIR1" Value="MYPROGRAMDIR"></Property>-->
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+      <Publish Dialog="CustomWelcomeDlg" Control="Next" Event="NewDialog" Value="RequirementsDlg">NOT Installed AND NOT PATCH</Publish>
+      <Publish Dialog="CustomWelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+
+      <Publish Dialog="RequirementsDlg" Control="Back" Event="NewDialog" Value="CustomWelcomeDlg">1</Publish>
+      <Publish Dialog="RequirementsDlg" Control="Next" Event="NewDialog" Value="UseExistingWebsiteDlg">NOT Installed AND NOT PATCH</Publish>
+
+      <!-- IIS Configuration-->
+      <Publish Dialog="UseExistingWebsiteDlg" Control="Back" Event="NewDialog" Value="RequirementsDlg">1</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="Next" Event="NewDialog" Value="MSSQLConnectionDlg" Order="3">CRMAPPVALIDFG = "1"</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="Next" Property="WCFURL" Value="localhost/[VIRTUALDIRECTORYNAME]_WCF" Order="4">CRMAPPVALIDFG = "1"</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="Next"  Property="CRMURL"  Value="http://localhost/[VIRTUALDIRECTORYNAME]" Order="4">CRMAPPVALIDFG = "1"</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="ChooseFolder" Property="_BrowseProperty" Value="[CRMAPPPATH]" Order="1">1</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="ChooseFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="ChooseAttachmentsFolder" Property="_BrowseProperty" Value="DIRATTACHMENTS" Order="1">1</Publish>
+      <Publish Dialog="UseExistingWebsiteDlg" Control="ChooseAttachmentsFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+
+      <Property Id="WIXUI_DONTVALIDATEPATH" Value="1"/>
+      <!--<Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+            <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>-->
+
+      <!-- Database Configuration-->
+      <Publish Dialog="MSSQLConnectionDlg" Control="Back" Event="NewDialog" Value="UseExistingWebsiteDlg">1</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Back"  Property="SQLSERVERCONNECTIONCHECK" Value="0">1</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Next" Event="NewDialog" Value="ChooseDatabaseScriptModeDlg" Order="6">DATABASEVALIDFG = "1" and SQLSERVERCONNECTIONCHECK = "1" </Publish>
+
+      <Publish Dialog="MSSQLConnectionDlg" Control="Test" Event="DoAction" Value="CheckMSSqlDlgInput" Order="1">1</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Test" Property="DATABASECONNECTIONSTRING" Value="Data Source=[DBHOST];Initial Catalog=[SQLDATABASE];User Id=[SQLADMINUSERNAME];Password=[SQLADMINPASSWORD]" Order="2">DATABASEVALIDFG = "1"</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Test" Event="DoAction" Value="TestSqlServerConnection" Order="3">DATABASEVALIDFG = "1"</Publish>
+
+      <Publish Dialog="MSSQLConnectionDlg" Control="Next"  Property="DATABASECONNECTIONSTRING" Value="Data Source=[DBHOST];Initial Catalog=[SQLDATABASE];User Id=[SQLADMINUSERNAME];Password=[SQLADMINPASSWORD]" Order="2">DATABASEVALIDFG = "1"</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Next"  Property="DATABASECONNECTIONSTRINGUSEMASTER" Value="Data Source=[DBHOST];Initial Catalog=master;User Id=[SQLADMINUSERNAME];Password=[SQLADMINPASSWORD]" Order="2">DATABASEVALIDFG = "1"</Publish>
+      <Publish Dialog="MSSQLConnectionDlg" Control="Next" Event="DoAction" Value="TestSqlServerConnection" Order="3">DATABASEVALIDFG = "1" and SQLSERVERCONNECTIONCHECK = "0"</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="ChooseDatabaseScriptModeDlg">NOT Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg">Installed</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Install" Property="TARGETDIR" Value="[MYPROGRAMDIR]" Order="1">1</Publish>
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="UseExistingWebsiteDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+      <!--<Publish Dialog="ExitDialog"
+        Control="Finish"
+        Event="DoAction"
+        Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>-->
+
+      <UIRef Id="WixUI_Common" />
+
+    </UI>
+    <InstallExecuteSequence>
+      <!--<Custom Action="MakeWepApp40" After="InstallFinalize">NOT Installed and NOT WIX_UPGRADE_DETECTED</Custom>
+      <Custom Action="MakeWcfApp40" After="InstallFinalize">NOT Installed and NOT WIX_UPGRADE_DETECTED</Custom>-->
+    </InstallExecuteSequence>
+  </Fragment>
+</Wix>

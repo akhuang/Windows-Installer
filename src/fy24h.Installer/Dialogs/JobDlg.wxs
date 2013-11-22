@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI Id="WcfDlg">
+            <Dialog Width="370" Height="270" Id="JobDlg" Title="!(loc.DlgTitle)" NoMinimize="yes">
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.DlgBannerBitmap)" />
+
+                <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>{\WixUI_Font_Title}Windows服务</Text>
+                </Control>
+                <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>选择安装目录</Text>
+                </Control>
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+
+                <Control Type="Text" Width="50" Height="11" X="26" Y="60" Id="FolderLabel" Text="安装目录:" />
+                <Control Type="PathEdit" Width="217" Height="15" X="26" Y="75" Id="FolderEdit" Property="DIRJOB"  >
+                    <Text>选择安装目录...</Text>
+                </Control>
+                <Control Type="PushButton" Width="46" Height="17" X="26" Y="75" Id="ChooseInstallFolder" Text="!(loc.InstallDirDlgChange)">
+                </Control>
+
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+                </Control>
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+                    <Publish Property="TARGETMODE" Value="ExistingWebsite" Order="1">1</Publish>
+                    <!--<Publish Event="DoAction" Value="checkInstallDirSet" Order="2">1</Publish>-->
+                    <!--<Publish Event="DoAction" Order="2" Value="setIISWebsiteData">
+                        1
+                        -->
+                    <!--InstallDirSet = 1 AND checkVirtualDirName = 1-->
+                    <!--
+                    </Publish>-->
+                    <!--<Publish Event="DoAction" Order="3" Value="checkVirtualDirectoryName">
+                        -->
+                    <!--InstallDirSet = 1-->
+                    <!--
+                    </Publish>-->
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+                    <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+                </Control>
+
+
+            </Dialog>
+        </UI>
+
+    </Fragment>
+</Wix>

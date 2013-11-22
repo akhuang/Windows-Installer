@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <UI Id="ChooseDatabaseScriptModeUI">
+      <Dialog Width="370" Height="270" Id="ChooseDatabaseScriptModeDlg"  Title="!(loc.DlgTitle)" NoMinimize="yes">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.DlgBannerBitmap)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}CRM主程序" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>选择数据库脚本执行方式</Text>
+        </Control>
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+
+        <Control Id="NewDatabaseButton" Type="PushButton" X="50" Y="65" Width="38" Height="38" ToolTip="全新脚本" Default="yes" Icon="yes" FixedSize="yes" IconSize="32" Text="[DbAddIcon]">
+          <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Property="CUSTOM_DATABASE_SCRIPT_MODE" Value="New">1</Publish>
+          <!--<Condition Action="disable">RequireSQLDatabase = 1</Condition>
+          <Condition Action="enable">RequireSQLDatabase &lt;&gt; 1</Condition>-->
+        </Control>
+
+        <Control Id="XMLLabel" Type="Text" X="105" Y="65" Width="100" Height="15" TabSkip="no">
+          <Text>{\WixUI_Font_Title}全新</Text>
+        </Control>
+        <Control Id="XMLText" Type="Text" X="105" Y="78" Width="230" Height="20">
+          <Text>使用全新数据库脚本</Text>
+        </Control>
+
+        <Control Id="DBButton" Type="PushButton" X="50" Y="118" Width="38" Height="38" ToolTip="升级脚本" FixedSize="yes" Text="[DbUpdateIcon]" IconSize="32" Icon="yes">
+          <Publish Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Property="CUSTOM_DATABASE_SCRIPT_MODE" Value="Update">1</Publish>
+        </Control>
+        <Control Id="DBLabel" Type="Text" X="105" Y="118" Width="100" Height="15" TabSkip="no">
+          <Text>{\WixUI_Font_Title}升级</Text>
+        </Control>
+        <Control Id="DBText" Type="Text" X="105" Y="131" Width="230" Height="30">
+          <Text>使用升级脚本对现有数据库进行升级操作(目前仅支持对上一个版本进行升级，不支持跨版本升级)</Text>
+        </Control>
+
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+          <Publish Event="NewDialog" Value="MSSQLConnectionDlg">NOT Installed</Publish>
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUINext)" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+        </Control>
+
+
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>

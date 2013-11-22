@@ -1,0 +1,1 @@
+net stop CustomSeviceForfy24h

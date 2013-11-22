@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="COMPGROUP_REG" Directory="TARGETDIR">
+
+      <Component Id="COMP_SelectedWebsiteId" Guid="622D72D3-FC1F-436C-8BE0-69290E9413B2">
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes"  Name="RegSelectedWebSiteId" Value="[SELECTEDWEBSITEID]" ></RegistryValue>
+      </Component>
+
+      <Component Id="COMP_VIRTUALDIRECTORYNAME" Guid="D3025A1E-71B3-4E94-909E-8E2AE474B44F" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[VIRTUALDIRECTORYNAME]"  Name="RegWebName" />
+      </Component>
+
+      <Component Id="COMP_WebDir" Guid="ABFF83E3-F7A7-4CF2-B6B5-85D9BE22F438">
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes"  Name="RegWebDir" Value="[MYPROGRAMDIR]" ></RegistryValue>
+      </Component>
+
+      <Component Id="COMP_Attachment" Guid="253F1B09-B2C1-44C8-A457-279398288EA6">
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[DIRATTACHMENTS]"  Name="RegAttachmentDir" />
+      </Component>
+
+      <Component Id="COMP_WcfURL" Guid="6E0A741A-F65B-4219-9F46-FDDA5AE8849C" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[WCFURL]"  Name="RegWcfURL" />
+      </Component>
+
+      <Component Id="COMP_CRMURL" Guid="5F6A3998-76D9-42F1-AEEE-D529D55DDB19" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[CRMURL]"  Name="RegCRMURL" />
+      </Component>
+
+      <Component Id="COMP_DataBaseConnectionRegistry" Guid="62D67E10-0743-404E-A4AE-3599A09F4FB1" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[DATABASECONNECTIONSTRING]"  Name="RegDatabaseConnectionString" />
+      </Component>
+
+      <Component Id="COMP_DatabaseConnectionStringUseMasterRegistry" Guid="C9144B1B-641F-42DA-B8D8-04C0844CF2F5" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[DATABASECONNECTIONSTRINGUSEMASTER]"  Name="RegDatabaseConnectionStringUseMaster" />
+      </Component>
+
+      <Component Id="COMP_DbHostRegistry" Guid="0CA1230C-3863-478D-BD80-F98CEA8E350F" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[DBHOST]"  Name="RegDbHost" />
+      </Component>
+
+      <Component Id="COMP_SqlDatabaseNameRegistry" Guid="455FAF8F-9E7C-46DF-A33D-4CBB99C086E5" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[SQLDATABASE]"  Name="RegSqlDatabaseName" />
+      </Component>
+
+      <Component Id="COMP_SqlAdminUserNameRegistry" Guid="82A064A4-C0CC-432E-A118-4E891226E350" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[SQLADMINUSERNAME]"  Name="RegSqlAdminUserName" />
+      </Component>
+
+      <Component Id="COMP_SqlAdminUserPasswordRegistry" Guid="23F137F0-F7D5-435C-B4C8-09B71C7A8E0D" >
+        <RegistryValue Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Type="string" KeyPath="yes" Value="[SQLADMINPASSWORD]"  Name="RegSqlAdminUserPassword" />
+      </Component>
+    </ComponentGroup>
+
+  </Fragment>
+
+</Wix>

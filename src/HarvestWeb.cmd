@@ -1,0 +1,1 @@
+"C:\Program Files\WiX Toolset v3.8\bin\heat" dir "Web" -dr "DIRCRMNET" -cg WebComponentGroup -gg -g1 -srd -sfrag -scom -sreg -var "var.WebFilePath"  -out "Web.wxs"

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI>
+            <Dialog Width="370" Height="270" Id="MyCustomDlg" Title="[ProductName] [Setup]" NoMinimize="yes">
+                <Control Id="WebsiteLabel" Type="Text" X="26" Y="64" Width="100" Height="15" TabSkip="no" Text="&amp;Website:" />
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="[ButtonText_Back]">
+                </Control>
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="[ButtonText_Next]">
+                    <Publish Event="NewDialog" Value="MSSQLConnectionDlg" Order="6">InstallDirSet = 1 AND checkVirtualDirName = 1 AND   DATABASEENGINE = "MSSQL"</Publish>
+              
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="[ButtonText_Cancel]">
+                    <Publish Event="SpawnDialog" Value="CancelDlg"><![CDATA[1]]></Publish>
+                </Control>
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="[BannerBitmap]" />
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+                <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>Please choose Website and install Folder</Text>
+                </Control>
+                <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+                    <Text>[DlgTitleFont]Use existing Website</Text>
+                </Control>
+                <Control Type="Text" Width="50" Height="11" X="26" Y="150" Id="FolderLabel" Text="Folder:" />
+                <Control Type="Edit" Width="217" Height="15" X="26" Y="165" Id="FolderEdit" Property="InstallDir" Disabled="yes">
+                    <Text>Choose Folder Path...</Text>
+                </Control>
+                <Control Type="PushButton" Width="46" Height="17" X="248" Y="165" Id="ChooseFolder" Text="Browse">
+                    <Publish Value="BrowseDlg" Event="NewDialog" Order="3">1</Publish>
+                    <Publish Event="DoAction" Value="getIISWebsitePath" Order="2">InstallDirSet = 0</Publish>
+                    <Publish Property="TARGETMODE" Value="ExistingWebsite" Order="2">1</Publish>
+                </Control>
+                <Control Type="ComboBox" Width="269" Height="16" X="26" Y="79" Id="ExistingWebsite" Property="ExistingWebsite">
+                </Control>
+                <Control Type="Text" Width="199" Height="10" X="26" Y="109" Id="VirtualDirLabel">
+                    <Text>Virtual directory name:</Text>
+                </Control>
+                <Control Type="Edit" Width="268" Height="15" X="26" Y="124" Id="VirtualDirEdit" Property="VIRTUALDIRECTORYNAME" />
+            </Dialog>
+        </UI>
+    </Fragment>
+</Wix>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <Property Id="FRAMEWORKROOT">
+      <RegistrySearch Id="FrameworkRootDir" Root="HKLM"
+                    Key="SOFTWARE\Microsoft\.NETFramework"
+                    Type="directory" Name="InstallRoot"/>
+    </Property>
+
+    <!-- Reference WixIIsExtension in project and pull in property by ref -->
+    <PropertyRef Id="IISMAJORVERSION"/>
+    <!--<Condition Message="Install requires IIS 6 or 7.">
+            <![CDATA[NOT Installed and (IISMAJORVERSION AND (IISMAJORVERSION = "#6" OR IISMAJORVERSION = "#7"))]]>
+        </Condition>-->
+
+    <SetProperty Id="ASPNETISAPIDLL" Sequence="execute" Before="ConfigureIIs"
+          Value="[FRAMEWORKROOT]aspnet_isapi.dll" />
+
+    <Property Id="ASPNETREGIIS" >
+      <DirectorySearch Path="[FRAMEWORKROOT]" Depth="4" Id="FindAspNetRegIis">
+        <FileSearch Name="aspnet_regiis.exe" MinVersion="4.0"/>
+      </DirectorySearch>
+    </Property>
+
+    <!--定义全局属性-->
+    <Property Id="SELECTEDWEBSITEID">
+      <RegistrySearch Id="SelectedWebSiteIdRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegSelectedWebSiteId" />
+    </Property>
+
+    <Property Id="CRMAPPPATH" Value="MYPROGRAMDIR" />
+
+    <Property Id="MYPROGRAMDIR">
+      <RegistrySearch Id="WebDirRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegWebDir" />
+    </Property>
+
+    <!--<Property Id="CRMAPPPATH">
+      -->
+    <!--<RegistrySearch Id="WebDirRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegWebDir" />-->
+    <!--
+    </Property>-->
+
+    <Property  Id="DIRATTACHMENTS">
+      <RegistrySearch Id="AttachmentRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegAttachmentDir" />
+    </Property>
+
+    <Property Id="VIRTUALDIRECTORYNAME"><![CDATA[CRM]]></Property>
+    <Property Id="VIRTUALDIRECTORYNAME_REG">
+      <RegistrySearch Id="WebNameRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegWebName" />
+    </Property>
+    <SetProperty Id="VIRTUALDIRECTORYNAME" After="AppSearch" Value="[VIRTUALDIRECTORYNAME_REG]">VIRTUALDIRECTORYNAME_REG</SetProperty>
+    <!--WCF地址-->
+    <Property Id="WCFURL">
+      <RegistrySearch Id="WcfURLRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegWcfURL" />
+    </Property>
+    <Property Id="CRMURL">
+      <RegistrySearch Id="CRMURLRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegCRMURL" />
+    </Property>
+    <!--与数据库相关的所有属性-->
+    <Property Id="CUSTOM_DATABASE_SCRIPT_MODE"><![CDATA[none]]></Property>
+    <Property Id="DATABASECONNECTIONSTRING">
+      <RegistrySearch Id="DataBaseConnectionRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegDatabaseConnectionString" />
+    </Property>
+    <Property Id="DATABASECONNECTIONSTRINGUSEMASTER">
+      <RegistrySearch Id="DatabaseConnectionStringUseMasterRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegDatabaseConnectionStringUseMaster" />
+    </Property>
+    <!--<SetProperty  Id="DATABASECONNECTIONSTRING" Value="Data Source=[DBHOST];Initial Category=[SQLDATABASE];User Id=[SQLADMINUSERNAME];Password=[SQLADMINPASSWORD]" After="InstallSqlData"></SetProperty>-->
+    <Property Id="DBHOST" Value=".\SQLEXPRESS">
+      <RegistrySearch Id="DbHostRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegDbHost" />
+    </Property>
+    <Property Id="SQLDATABASE" Value="KYCRM">
+      <RegistrySearch Id="SqlDatabaseNameRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegSqlDatabaseName" />
+    </Property>
+    <Property Id="SQLADMINUSERNAME" Value="sa">
+      <RegistrySearch Id="SqlAdminUserNameRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegSqlAdminUserName" />
+    </Property>
+    <Property Id="SQLADMINPASSWORD" Hidden="yes">
+      <RegistrySearch Id="SqlAdminUserPasswordRegistry" Type="raw" Root="HKLM" Key="Software\[Manufacturer]\[ProductName]" Name="RegSqlAdminUserPassword" />
+    </Property>
+    <Property Id="DATABASEENGINE" Value="MSSQL"></Property>
+    <Property Id="checkDatabaseConnection">0</Property>
+
+    <!--PROPERTIES-->
+    <!--Web site Id: used by aspnet_regiis-->
+    <Property Id="WEBSITEUNIQUEID"></Property>
+    <!--WebDlg Next condition-->
+    <Property Id="CRMAPPVALIDFG"></Property>
+    <!--MSSqlDlg Next condition-->
+    <Property Id="DATABASEVALIDFG"></Property>
+
+    <Property Id="NETCHECK"><![CDATA[GreenCheck]]></Property>
+    <Property Id="IISCHECK"><![CDATA[RedX]]></Property>
+    <Property Id="SQLSERVERCHECK"><![CDATA[RedX]]></Property>
+    <Property Id="DbAddIcon"><![CDATA[DbAdd]]></Property>
+    <Property Id="DbUpdateIcon"><![CDATA[DbUpdate]]></Property>
+  </Fragment>
+</Wix>

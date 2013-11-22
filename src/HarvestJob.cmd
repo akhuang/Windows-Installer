@@ -1,0 +1,1 @@
+"C:\Program Files\WiX Toolset v3.8\bin\heat" dir "Job" -dr "DIRJOB" -cg JobComponentGroup  -gg -g1 -srd -sfrag -scom -sreg -var "var.JobFilePath"  -out "Job.wxs"

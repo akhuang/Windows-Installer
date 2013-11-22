@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <?define DbScriptsFilePath="DataBaseScripts" ?>
+  <?define WebFilePath="c:\temp\Web\" ?>
+  <?define WcfFilePath="c:\temp\Wcf\" ?>
+  <?define JobFilePath="c:\temp\Job\" ?>
+</Include>

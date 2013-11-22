@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+    <DirectoryRef Id="MyShortcutsDir">
+      <Component Id="CMP_Shortcut"
+                 Guid="A51B2149-BADE-4A82-B02C-FEA964A8A1E0" >
+        <Shortcut Id="StartMenuShortcut_UserManual"
+                    Name="UserManual"
+                    Description="User Manual"
+                    Target="[DIRSUPPORT]UserManual.pdf" />
+
+        <Shortcut Id="StartMenuShortcut_StartService"
+                    Name="Start Job Monitor Service"
+                    Description="Start Job Monitor"
+                    Target="[DIRSUPPORT]StartService.bat" />
+
+        <Shortcut Id="StartMenuShortcut_StopService"
+                    Name="Stop Job Monitor Service"
+                    Description="Start Job Monitor"
+                    Target="[DIRSUPPORT]StopService.bat" />
+
+        <util:InternetShortcut Id="StartMenuShortcut_SupportUrl" Type="link"
+                               Name="Support"
+                               Target="http://www.abc.com"/>
+
+        <util:InternetShortcut Id="WebsiteShortcut"
+                        Name="Website"
+                               Target="[CRMURL]"/>
+
+        <Shortcut Id="UninstallShortcut"
+                    Name="Uninstall"
+                    Description="Uninstall"
+                    Target="[System64Folder]msiexec.exe"
+                    Arguments="/x [ProductCode]" />
+
+        <RemoveFolder Id="MyShortcutsDir" On="uninstall" />
+
+        <RegistryValue Root="HKCU"
+                        Key="Software\Microsoft\Fy24hCRM"
+                        Name="installed"
+                        Type="integer"
+                        Value="1"
+                        KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+
+    <DirectoryRef Id="DIRSUPPORT">
+      <Component  Id="COMP_UserManual" Guid="3E5BA709-30DB-4481-ABD8-61AF971619C3">
+        <File Id="FILE_UserManual" KeyPath="yes" src="ShortCut\UserManual.pdf" Name="UserManual.pdf"></File>
+      </Component>
+      <Component  Id="COMP_NetStart" Guid="E3D7E099-EA9A-4560-83B3-C1B80725C09A">
+        <File Id="FILE_NetStart" KeyPath="yes" src="ShortCut\StartService.bat" Name="StartService.bat"></File>
+      </Component>
+      <Component  Id="COMP_NetStop" Guid="15DE666A-768A-49B9-97D9-0BD087814064">
+        <File Id="FILE_NetStop" KeyPath="yes" src="ShortCut\StopService.bat" Name="StopService.bat"></File>
+      </Component>
+    </DirectoryRef>
+    <ComponentGroup Id="CompGroupSupport">
+      <ComponentRef Id="COMP_UserManual" />
+      <ComponentRef Id="CMP_Shortcut" />
+      <ComponentRef Id="COMP_NetStart" />
+      <ComponentRef Id="COMP_NetStop" />
+    </ComponentGroup>
+
+
+  </Fragment>
+</Wix>

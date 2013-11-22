@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+
+  <!--Condition: Windows Server 2003 sp2及以上-->
+  <Bundle Name="fy24h"
+          Version="1.0.1"
+          Manufacturer="www.fy24h.com"
+          UpgradeCode="24ca48e3-9b20-4e76-9ab3-c359a3fcd8b5"
+          AboutUrl="http://www.fy24h.com"
+          SplashScreenSourceFile="SplashScreen.bmp"
+          DisableModify="yes" DisableRepair="yes" Condition="((VersionNT >= v5.2) AND (ServicePackLevel >=2)) OR (VersionNT >= v6.0)">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" >
+      <bal:WixStandardBootstrapperApplication LicenseFile="license.rtf"
+                                              LogoFile="logo.png" SuppressOptionsUI="yes" SuppressRepair="yes"
+            />
+      <Payload Name="2052\thm.wxl" SourceFile="2052\thm.wxl" />
+
+    </BootstrapperApplicationRef>
+
+    <!--<BootstrapperApplicationRef Id="ManagedBootstrapperApplicationHost">
+            <PayloadGroupRef Id="InstallerPayload"/>
+        </BootstrapperApplicationRef>-->
+
+    <Chain>
+      <!--<PackageGroupRef Id="NetFx35SP1Full"/>-->
+      <PackageGroupRef Id="NetFx40Full"/>
+      <PackageGroupRef Id="InstallerPackages"></PackageGroupRef>
+    </Chain>
+  </Bundle>
+
+  <Fragment>
+    <PayloadGroup Id="InstallerPayload">
+      <Payload SourceFile="..\CustomBootstrapper\bin\release\MahApps.Metro.dll"/>
+      <Payload SourceFile="..\CustomBootstrapper\bin\release\System.Windows.Interactivity.dll"/>
+      <Payload SourceFile ="..\CustomBootstrapper\bin\release\CRMCustomBootstrapper.dll"/>
+      <Payload SourceFile="..\CustomBootstrapper\BootstrapperCore.config" />
+      <Payload SourceFile="C:\Program Files\WiX Toolset v3.8\SDK\Microsoft.Deployment.WindowsInstaller.dll"/>
+    </PayloadGroup>
+  </Fragment>
+
+  <Fragment>
+    <PackageGroup Id="InstallerPackages">
+      <MsiPackage Id="CRMInstall" Vital="yes"  ForcePerMachine="yes" Name="fy24h.installer.msi" SourceFile="..\build\compile\zh-CN\fy24h.Installer.msi" DisplayInternalUI="yes" >
+        <!--<MsiPackage Id="CRMInstall" Vital="yes"  Name="Packages\StandardSetup.msi" SourceFile="..\StandardSetup\bin\Release\StandardSetup.msi" DisplayInternalUI="yes">-->
+
+      </MsiPackage>
+    </PackageGroup>
+  </Fragment>
+
+  <Fragment>
+    <!--NETFRAMEWORK35FULL-->
+    <util:RegistrySearch Id="NETFRAMEWORK35Full"
+                         Root="HKLM"
+                         Key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5"
+                         Value="Install"
+                         Variable="NETFRAMEWORK35Full"
+                         Result="value" />
+
+
+    <!--<Property Id="NETFRAMEWORK35SP1FULL" Secure="yes">-->
+    <util:RegistrySearch Id="NETFRAMEWORK35SP1FULL"
+                         Root="HKLM"
+                         Key="Software\Microsoft\NET Framework Setup\NDP\v3.5"
+                         Value="SP"
+                         Variable="NETFRAMEWORK35SP1FULL"
+                         Result="value" />
+
+  </Fragment>
+
+  <Fragment>
+    <util:RegistrySearch
+        Id="ASPNETFRAMEWORK40"
+        Variable="ASPNETFRAMEWORK40"
+        Root="HKLM"
+        Key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"
+        Value="Install"
+        Result="value" />
+  </Fragment>
+
+  <Fragment>
+    <util:RegistrySearchRef Id="ASPNETFRAMEWORK40"/>
+    <WixVariable Id="WixMbaPrereqPackageId" Value="NetFx40Full" />
+    <WixVariable Id="WixMbaPrereqLicenseUrl" Value="NetfxLicense.rtf" />
+
+    <!--<PropertyRef Id="NETFRAMEWORK35FULL"/>-->
+    <util:RegistrySearchRef Id="NETFRAMEWORK35Full"/>
+    <util:RegistrySearchRef Id="NETFRAMEWORK35SP1FULL"/>
+    <!--<PackageGroup Id="NetFx35SP1Full">
+      <ExePackage Id="NetFx35SP1Full" Cache="no" Compressed="yes" PerMachine="yes" Permanent="yes" Vital="yes"
+                  InstallCommand="/q"
+                   DetectCondition="NETFRAMEWORK35Full and NETFRAMEWORK35SP1FULL >=1"
+          SourceFile="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper\Packages\DotNetFX35SP1\dotNetFx35.exe">
+      </ExePackage>
+    </PackageGroup>-->
+
+    <PackageGroup Id="NetFx40Full">
+      <ExePackage Id="NetFx40Full" Cache="no" Compressed="yes" PerMachine="yes" Permanent="yes" Vital="yes"
+                  InstallCommand="/q"
+                   DetectCondition="ASPNETFRAMEWORK40"
+          SourceFile="C:\Program Files\Microsoft SDKs\Windows\v7.0A\Bootstrapper\Packages\DotNetFX40\dotNetFx40_Full_x86_x64.exe">
+      </ExePackage>
+    </PackageGroup>
+
+  </Fragment>
+</Wix>

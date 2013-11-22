@@ -1,0 +1,1 @@
+"C:\Program Files\WiX Toolset v3.8\bin\heat" dir "Wcf" -dr "DIRWCF" -cg WcfComponentGroup  -gg -g1 -srd -sfrag -var "var.WcfFilePath"  -out "Wcf.wxs"

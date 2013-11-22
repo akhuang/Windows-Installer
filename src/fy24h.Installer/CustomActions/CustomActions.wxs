@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <!--Custom Action-->
+    <CustomAction BinaryKey="getPathBin" Id="checkInstallDirSet" VBScriptCall="checkInstallDirSet">1</CustomAction>
+    <CustomAction BinaryKey="checkNewWebsiteBin" Id="setIISWebsiteData" VBScriptCall="setIISWebsiteData">1</CustomAction>
+    <CustomAction BinaryKey="getPathBin" Id="checkVirtualDirectoryName" VBScriptCall="checkVirtualDirectoryName">1</CustomAction>
+    <CustomAction BinaryKey="getPathBin" Id="getIISWebsitePath" VBScriptCall="getIISWebsitePath">1</CustomAction>
+    <CustomAction BinaryKey="checkDatabaseBin" Id="checkDatabaseLogin" VBScriptCall="checkDatabaseLogin">1</CustomAction>
+    <CustomAction BinaryKey="checkDatabaseBin" Id="proposeDatabaseName" VBScriptCall="proposeDatabaseName">1</CustomAction>
+    <CustomAction BinaryKey="checkDatabaseBin" Id="proposeUsername" VBScriptCall="proposeUsername">1</CustomAction>
+    <CustomAction BinaryKey="checkDatabaseBin" Id="proposePassword" VBScriptCall="proposePassword">1</CustomAction>
+    <CustomAction VBScriptCall="getWebsites" BinaryKey="getWebsitesBin" Id="getWebsitesCustomAction">1</CustomAction>
+    <CustomAction BinaryKey="getIPbin" Id="getIPsCustomAction" VBScriptCall="getIPs">1</CustomAction>
+
+    <CustomAction Id="MakeWepApp40" Directory="DIRCRMNET" ExeCommand="[ASPNETREGIIS] -norestart -s W3SVC/[WEBSITE_ID]/ROOT/[VIRTUALDIRECTORYNAME]" Return="check"/>
+    <CustomAction Id="MakeWcfApp40" Directory="DIRWCF" ExeCommand="[ASPNETREGIIS] -norestart -s W3SVC/[WEBSITE_ID]/ROOT/[VIRTUALDIRECTORYNAME]_WCF" Return="check"/>
+ 
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="CheckSqlServer"  DllEntry="CheckSqlServer" />
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="CustomAction1"  DllEntry="CustomAction1" />
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="TestSqlServerConnection"  DllEntry="TestSqlServerConnection"/>
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="GetExistWebsites"  DllEntry="GetExistWebsites"/>
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="UpdatePropertyWithSelectedWebSite"  DllEntry="UpdatePropertyWithSelectedWebSite"/>
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="CheckWebDlgInput"  DllEntry="CheckWebDlgInput"/>
+    <CustomAction BinaryKey="fy24h.CustomActions.CA" Id="CheckMSSqlDlgInput"  DllEntry="CheckMSSqlDlgInput"/>
+    <!--<CustomAction BinaryKey="checkUserInput" Id="showTestFailureMsg" VBScriptCall="showTestFailureMsg">1</CustomAction>-->
+
+    <!--Binary source-->
+    <!--<Binary Id="checkUserInput" SourceFile="Scripts\checkUserInputFromDialog.vbs" />-->
+    <Binary Id="getIPbin" SourceFile="Scripts\getIPs.vbs" />
+    <Binary Id="getWebsitesBin" SourceFile="Scripts\getWebsites.vbs" />
+    <Binary Id="checkFirstUserBin" SourceFile="Scripts\checkFirstUserValues.vbs" />
+    <Binary Id="checkNewWebsiteBin" SourceFile="Scripts\checkNewWebsiteValues.vbs" />
+    <Binary Id="getPathBin" SourceFile="Scripts\getPathValues.vbs" />
+    <Binary Id="checkRequirementsBin" SourceFile="Scripts\checkRequirements.vbs" />
+    <Binary Id="checkDatabaseBin" SourceFile="Scripts\checkDatabase.vbs" />
+    <Binary Id="createScriptConfigBin" SourceFile="Scripts\createScriptConfig.vbs" />
+    <Binary Id="setReadOnlyFlagBin" SourceFile="Scripts\setReadOnlyFlag.vbs" />
+    <Binary Id="SqlSchemaScriptsBin"  SourceFile="DataBaseScripts\Schema.sql"></Binary>
+    <Binary Id="SqlInitDataScriptsBin"  SourceFile="DataBaseScripts\Init.sql"></Binary>
+
+    <Binary Id="SqlUpdateDataScriptsBin"  SourceFile="DataBaseScripts\UpdateScript.sql"></Binary>
+ 
+    <Binary Id="fy24h.CustomActions.CA"   SourceFile="..\build\compile\fy24h.CustomActions.CA.dll"></Binary>
+    <Binary Id="RedX" SourceFile="Bitmaps\RedX-24.ico" />
+    <Binary Id="GreenCheck" SourceFile="Bitmaps\GreenCheck-24.ico" />
+
+    <Binary Id="DbAdd" SourceFile="Bitmaps\db_add.ico" />
+    <Binary Id="DbUpdate" SourceFile="Bitmaps\db_update.ico" />
+
+    <Binary Id="FluentMigrator" SourceFile="FluentMigrator\Migrate.exe"/>
+  </Fragment>
+</Wix>
